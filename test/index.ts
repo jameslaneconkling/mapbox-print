@@ -1,6 +1,6 @@
 import arg from 'arg'
 import test from 'tape'
-import { get, required, tileUrl } from '../src/utils'
+import { bboxToTiles, get, required, tileUrl } from '../src/utils'
 
 
 const args = arg({
@@ -56,4 +56,27 @@ test('unsuccessful tile request', (t) => {
     .on('end', () => {
       t.fail('bad request should not end')
     })
+})
+
+
+test('convert bbox to tileset', (t) => {
+  t.plan(1)
+
+  t.deepEqual(
+    Array.from(bboxToTiles({ west: -68.02, south: 44, east: -68, north: 44.02 }, 15)),
+    [
+      { x: 10192, y: 11912 },
+      { x: 10193, y: 11912 },
+      { x: 10194, y: 11912 },
+      { x: 10192, y: 11913 },
+      { x: 10193, y: 11913 },
+      { x: 10194, y: 11913 },
+      { x: 10192, y: 11914 },
+      { x: 10193, y: 11914 },
+      { x: 10194, y: 11914 },
+      { x: 10192, y: 11915 },
+      { x: 10193, y: 11915 },
+      { x: 10194, y: 11915 }
+    ]
+  )
 })
