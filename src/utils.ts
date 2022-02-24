@@ -1,5 +1,7 @@
 import * as https from 'https'
 import * as stream from 'stream'
+import { mkdtemp } from 'fs/promises'
+import { sep } from 'path'
 import SphericalMercator from '@mapbox/sphericalmercator'
 
 
@@ -32,7 +34,7 @@ export const tileUrl = (x: number, y: number, z: number, user: string, style: st
 }
 
 
-export const get = (url: string) => {
+export const get = (url: string): stream.Readable => {
   const response = new stream.Readable({
     read: noop,
   })
@@ -65,19 +67,25 @@ const mercator = new SphericalMercator({
 })
 
 
-export type BoundingBox = [number, number, number, number]
+export type BBox = { west: number, south: number, east: number, north: number }
 
 
-export function* bboxToTiles(bbox: BoundingBox, zoom: number): Generator<{ x: number, y: number }, void, void> {
-  const { minX, minY, maxX, maxY } = mercator.xyz(bbox, zoom)
+export function* bboxToTiles(bbox: BBox, zoom: number): Generator<{ x: number, y: number }, void, void> {
+  const { minX, minY, maxX, maxY } = mercator.xyz([bbox.west, bbox.south, bbox.east, bbox.north], zoom)
   let x = minX
   let y = minY
 
-  while (y < maxY) {
-    while (x < maxX) {
+  while (y <= maxY) {
+    while (x <= maxX) {
       yield { x, y }
       x += 1
     }
+    x = minX
     y += 1
   }
+}
+
+
+export const createTempDir = async (prefix: string) => {
+  return await mkdtemp(`${__dirname}${sep}..${sep}${prefix}-`)
 }
