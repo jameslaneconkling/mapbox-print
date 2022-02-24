@@ -11,7 +11,8 @@
   "license": "ISC",
   "dependencies": {
     "@mapbox/sphericalmercator": "^1.2.0",
-    "arg": "^5.0.1"
+    "arg": "^5.0.1",
+    "jimp": "^0.16.1"
   },
   "devDependencies": {
     "@types/mapbox__sphericalmercator": "^1.1.5",

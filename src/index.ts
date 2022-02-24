@@ -1,5 +1,7 @@
 export {
   tileUrl,
   get,
-  bboxToTiles,
+  composeImagesHorizontally,
+  composeImagesVertically,
+  print,
 } from './utils'

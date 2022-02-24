@@ -1,6 +1,5 @@
-import * as fs from 'fs'
 import arg from 'arg'
-import { any, BBox, bboxToTiles, get, required, tileUrl } from './utils'
+import { any, BBox, print, required } from './utils'
 
 
 const args = arg({
@@ -19,6 +18,8 @@ const args = arg({
   '--user': String,
   '--style': String,
   '--token': String,
+  // '--outfile': String,
+  // '--dry-run': Boolean,
 })
 
 
@@ -29,14 +30,6 @@ const style = required(args['--style'], '--style')
 const token = required(args['--token'], '--token')
 
 
-for (const { x, y } of bboxToTiles(bbox, zoom)) {
-  console.log(`Downloading z: ${zoom}, x: ${x}, y: ${y}`)
-
-  const get$ = get(tileUrl(x, y, zoom, user, style, token))
-
-  get$
-    .on('error', (err) => console.error(`Error downloading z: ${zoom}, x: ${x}, y: ${y}`, err))
-    .on('end', () => console.log(`Done downloading z: ${zoom}, x: ${x}, y: ${y}`))
-
-  get$.pipe(fs.createWriteStream(`${__dirname}/../images/${zoom}-${x}-${y}.png`))
-}
+print(bbox, zoom, user, style, token)
+  .then((out) => out.write(`${__dirname}/../out.png`))
+  .catch((err) => console.error(err))
