@@ -1,5 +1,6 @@
 import arg from 'arg'
-import { any, BBox, print, required } from './utils'
+import { print } from './'
+import { any, BBox, required } from './utils'
 
 
 const args = arg({
