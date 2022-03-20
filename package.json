@@ -2,10 +2,11 @@
   "name": "mapbox-print",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "lint": "eslint src/index.ts",
-    "test": "ts-node ./test/index.ts | faucet"
+    "test": "ts-node ./test/index.ts | faucet",
+    "build": "rm -rf dist/ && tsc"
   },
   "author": "",
   "license": "ISC",
