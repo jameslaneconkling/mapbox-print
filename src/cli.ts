@@ -19,7 +19,7 @@ const args = arg({
   '--user': String,
   '--style': String,
   '--token': String,
-  // '--outfile': String,
+  '--outfile': String,
   // '--dry-run': Boolean,
 })
 
@@ -29,8 +29,12 @@ const bbox = required(args['--bbox'], '--bbox')
 const user = required(args['--user'], '--user')
 const style = required(args['--style'], '--style')
 const token = required(args['--token'], '--token')
+const outfile = args['--outfile'] ?? `${process.cwd()}/map.png`
 
 
 print(bbox, zoom, user, style, token)
-  .then((out) => out.write(`${__dirname}/../out.png`))
+  .then((out) => {
+    out.write(outfile)
+    console.log(`Saved map to ${outfile}`)
+  })
   .catch((err) => console.error(err))
